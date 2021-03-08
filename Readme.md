@@ -1,4 +1,6 @@
-### tool for check Mac status on command line 
+### command line tool check Mac status
+
+
 
 
 ### 1.build
