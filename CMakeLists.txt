@@ -6,9 +6,10 @@ set(CMAKE_CXX_STANDARD 20)
 include_directories(.)
 
 add_executable(smc
-        main.cc
-        power.cc
-        smc.cc
+        main.cpp
+        power.cpp
+        smc.cpp
+        test.cpp
         smc.h
         power.h)
 target_link_libraries(${PROJECT_NAME} "-framework IOKit")

@@ -49,12 +49,14 @@ const char *Power::getBatteryHealth() {
     return batteryHealth;
 }
 
-int Power::getDesignCycleCount() {
+uint32_t Power::getDesignCycleCount() {
     if (powerSourceInformation == nullptr) return 0;
     auto designCycleCountRef = (CFNumberRef) CFDictionaryGetValue(
             powerSourceInformation,
             CFSTR("DesignCycleCount")
     );
+
+
     uint32_t designCycleCount;
     if (!CFNumberGetValue(designCycleCountRef, kCFNumberSInt32Type, &designCycleCount))
         return 0;
@@ -62,7 +64,22 @@ int Power::getDesignCycleCount() {
         return designCycleCount;
 }
 
-int Power::getBatteryCharge() {
+uint32_t Power::getCycleCount() {
+    io_registry_entry_t entry;
+    entry = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceNameMatching("AppleSmartBattery"));
+    if (entry == IO_OBJECT_NULL) return 0;
+
+    CFMutableDictionaryRef battery;
+    IORegistryEntryCreateCFProperties(entry, &battery, nullptr, 0);
+    auto cycleCountRef = (CFNumberRef) CFDictionaryGetValue(battery,CFSTR("CycleCount"));
+    uint32_t cycleCount;
+    CFNumberGetValue(cycleCountRef, kCFNumberSInt32Type, &cycleCount);
+    CFRelease(battery);
+    CFRelease(cycleCountRef);
+    return cycleCount;
+}
+
+u_char Power::getBatteryCharge() {
     CFNumberRef currentCapacity;
     CFNumberRef maximumCapacity;
 
@@ -80,11 +97,19 @@ int Power::getBatteryCharge() {
     CFNumberGetValue(currentCapacity, kCFNumberIntType, &iCurrentCapacity);
     CFNumberGetValue(maximumCapacity, kCFNumberIntType, &iMaximumCapacity);
 
-    return (float) iCurrentCapacity / iMaximumCapacity * 100;
+    return (float)iCurrentCapacity / iMaximumCapacity * 100;
 }
 
 Power::~Power() {
     CFRelease(powerInfo);
     CFRelease(powerSourceInformation);
+}
+
+uint32_t Power::getDesignCapacity() {
+    return 0;
+}
+
+uint32_t Power::getCapacity() {
+    return 0;
 }
 

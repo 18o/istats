@@ -18,7 +18,7 @@ int main() {
 
     printf("--- Battery Stats ---\n");
     printf("Battery Health: %s\n", p.getBatteryHealth());
-    printf("Design Cycle Count: %i\n", p.getDesignCycleCount());
+    printf("Cycle Count: %i/%i\n", Power::getCycleCount(), p.getDesignCycleCount());
     printf("Current Charge %i%%\n", p.getBatteryCharge());
     printf("Battery Temp %0.1f °C\n", bat_temp);
     return 0;

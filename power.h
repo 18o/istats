@@ -5,6 +5,7 @@
 #include <iostream>
 #include <CoreFoundation/CoreFoundation.h>
 
+#include <IOKit/IOKitLib.h>
 #include <IOKit/ps/IOPSKeys.h>
 #include <IOKit/ps/IOPowerSources.h>
 
@@ -22,9 +23,13 @@ public:
 
     const char *getBatteryHealth();
 
-    int getDesignCycleCount();
+    uint32_t getDesignCycleCount();
+    static uint32_t getCycleCount();
 
-    int getBatteryCharge();
+    u_char getBatteryCharge();
+
+    uint32_t getDesignCapacity();
+    uint32_t getCapacity();
 
 private:
     CFDictionaryRef powerSourceInformation{};
